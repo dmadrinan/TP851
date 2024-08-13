@@ -1,6 +1,6 @@
 ﻿$PBExportHeader$p_delete_make_exe.srj
 $PBExportComments$Generated Application Executable Project
-EXE:delete_make.exe,,0,1,1,0,C:\Program Files (x86)\Appeon\Common\PowerBuilder\Runtime 21.0.0.1509
+EXE:delete_make.exe,,0,1,1,0,C:\Program Files (x86)\Appeon\Common\PowerBuilder\Runtime 22.2.0.3356
 CMP:0,0,0,2,0,0,1
 COM:Solenium Group Inc.
 DES:Talking Pictures Automotive Catalog - Delete Make Product File
