@@ -1,0 +1,32 @@
+﻿$PBExportHeader$uf_check_path.srf
+global type uf_check_path from function_object
+end type
+
+forward prototypes
+global function string uf_check_path (string as_path)
+end prototypes
+
+global function string uf_check_path (string as_path);String ls_path, ls_test_name, ls_error
+ls_path = as_path
+
+IF Not DirectoryExists(ls_path) Then
+	ls_error = 'Selected Path does not exist.'
+	Return ls_error
+END IF
+
+If Right(ls_path, 1) <> "\" Then ls_path = ls_path + "\"
+ls_test_name = ls_path + "t0e0s0t0i0n0g1234"
+
+//// CreateDirectory ( ls_path )
+IF Not DirectoryExists( ls_test_name ) Then
+	IF CreateDirectory ( ls_test_name ) <> 1 Then		
+		ls_error = 'Selected Path does not have enough permission to read and write.'
+	ELSE
+		RemoveDirectory (ls_test_name ) 
+	END IF
+END IF
+
+Return ls_error
+
+end function
+

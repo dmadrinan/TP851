@@ -1,0 +1,19 @@
+﻿$PBExportHeader$uf_dwfilter_format.srf
+global type uf_dwfilter_format from function_object
+end type
+
+forward prototypes
+global subroutine uf_dwfilter_format (datawindow adw_filter)
+end prototypes
+
+global subroutine uf_dwfilter_format (datawindow adw_filter);int li_index, li_cols
+
+li_cols = Integer(adw_filter.Object.DataWindow.Column.Count)
+for li_index = 1 to li_cols
+	//adw_filter.Modify("#" + string(li_index) + ".TabSequence='" + string(li_index) + "'")
+	adw_filter.Modify("#" + string(li_index) + ".Border='5'")
+	adw_filter.Modify("#" + string(li_index) + ".Height.AutoSize='No'")
+	adw_filter.Modify("#" + string(li_index) + ".Edit.DisplayOnly='No'")
+next
+end subroutine
+

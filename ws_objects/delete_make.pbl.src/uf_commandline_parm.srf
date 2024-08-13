@@ -1,0 +1,51 @@
+﻿$PBExportHeader$uf_commandline_parm.srf
+global type uf_commandline_parm from function_object
+end type
+
+forward prototypes
+global function boolean uf_commandline_parm (string as_commandline_parm)
+end prototypes
+
+global function boolean uf_commandline_parm (string as_commandline_parm);Integer li_pos, li_cnt, li_start = 1, li_length
+String ls_parm
+String ls_userid, ls_servername, ls_dbname
+
+ls_parm = as_commandline_parm
+li_pos = Pos( ls_parm, '|' )
+
+IF ls_parm = '' or li_pos = 0 Then Return False
+li_cnt ++
+li_length = li_pos
+
+Do While li_cnt < 6
+	IF li_cnt = 1 Then
+		ls_userid = Mid(ls_parm, li_start, li_length - li_start )
+		
+	ElseIF li_cnt = 2 Then
+		ls_servername = Mid(ls_parm, li_start, li_length - li_start )
+		
+	ElseIF li_cnt = 3 Then
+		ls_dbname = Mid(ls_parm, li_start, li_length - li_start)
+
+	END IF
+	// It means is last loop
+	IF li_pos = 0 Then Exit
+		
+	li_start = li_pos +1
+	li_pos = Pos( ls_parm, '|' , li_pos + 1)
+	IF li_pos > 0 Then
+		li_length = li_pos
+	Else
+		li_length = 200 // Any big length
+	END IF
+	li_cnt ++
+Loop
+li_cnt = li_cnt
+
+gs_userid = ls_userid
+gs_serverName = ls_serverName
+gs_tp_profile = ls_dbname
+
+Return True
+end function
+

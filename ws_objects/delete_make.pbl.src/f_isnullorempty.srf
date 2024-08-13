@@ -1,0 +1,13 @@
+﻿$PBExportHeader$f_isnullorempty.srf
+global type f_isnullorempty from function_object
+end type
+
+forward prototypes
+global function boolean f_isnullorempty (string as_value)
+end prototypes
+
+global function boolean f_isnullorempty (string as_value);IF IsNull( as_value ) or as_value = "" THEN Return TRUE
+
+Return FALSE
+end function
+

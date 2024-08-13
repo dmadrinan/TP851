@@ -1,0 +1,52 @@
+﻿$PBExportHeader$uf_getdbuser.srf
+global type uf_getdbuser from function_object
+end type
+
+forward prototypes
+global function integer uf_getdbuser (ref string as_dbuser, ref string as_dbpwd)
+end prototypes
+
+global function integer uf_getdbuser (ref string as_dbuser, ref string as_dbpwd);String ls_uid, ls_path, ls_return, ls_ini_path
+Int li_pos, i, li_space
+
+//RegistryGet("HKEY_LOCAL_MACHINE\Software\DSG\Talking Pictures", "Path", ls_path )
+RegistryGet(gs_Hkey_CurrentUser, "Path", ls_path)
+
+If NOT FileExists(ls_path+ "\DbUser.Exe") Then
+	MessageBox("Error","Please make sure that 'DbUser.exe' exists in Talking Pictures folder and try again.", StopSign!)
+	Return 1
+End If
+
+Run( ls_path+ "\DbUser.Exe FromTP", Minimized!)
+Sleep(1)
+
+ls_ini_path=ls_path+"\Talkpic.ini"
+//Get encrypted user id and password from Talkpic.ini
+ls_return = ProfileString(ls_ini_path, 'DBTalkpicImage', 'DBImage', "")
+//Set the value to blank
+SetProfilestring(ls_ini_path, 'DBTalkpicImage', 'DBImage', "")
+
+//Decrypt the user id and password
+If ls_return <> '' Then
+	li_pos = Pos(ls_return, " ")
+	do while Pos(ls_return, " ") > 0
+		ls_uid = ls_uid + CharA((Long(Mid(ls_return, 1, li_pos - 1)) - 8) / 3)
+		ls_return = Mid(ls_return, li_pos + 1)
+		li_pos = Pos(ls_return, " ")	
+	loop
+	ls_uid = ls_uid + CharA((Long(Mid(ls_return, 1)) - 8) / 3)
+End If	
+
+li_pos = pos( ls_uid, '|' )
+
+IF li_pos = 0 Then
+	MessageBox("Talking Pictures Automotive Catalog", "Unable to initiate the Talking Pictures database.  Talking Pictures Automotive Catalog application will be terminated.", StopSign!, Ok!)
+	Return 1
+END IF
+	
+as_dbUser	= Left ( ls_uid, li_pos - 1 )
+as_dbPwd	= Mid ( ls_uid, li_pos + 1 )
+
+Return 0
+end function
+

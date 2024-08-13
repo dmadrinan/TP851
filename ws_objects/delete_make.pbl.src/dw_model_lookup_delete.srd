@@ -1,0 +1,14 @@
+﻿$PBExportHeader$dw_model_lookup_delete.srd
+$PBExportComments$Data window with dddw for vehicle model lookup.
+release 7;
+datawindow(units=0 timer_interval=0 color=79741120 processing=0 HTMLDW=no print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 97 print.margin.bottom = 97 print.paper.source = 0 print.paper.size = 0 print.prompt=no print.buttons=no print.preview.buttons=no )
+summary(height=4 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=104 color="536870912" )
+table(column=(type=char(10) updatewhereclause=yes name=make dbname="models.make" )
+ column=(type=char(10) updatewhereclause=yes name=model dbname="models.model" )
+ retrieve="PBSELECT( VERSION(400) TABLE(NAME=~"models~" )  TABLE(NAME=~"parts~" )  TABLE(NAME=~"parts_applications~" ) COLUMN(NAME=~"models.make~") COLUMN(NAME=~"models.model~")    JOIN (LEFT=~"parts_applications.part#~"    OP =~"=~"RIGHT=~"parts.part#~" )    JOIN (LEFT=~"parts_applications.make~"    OP =~"=~"RIGHT=~"models.make~" )    JOIN (LEFT=~"parts_applications.model~"    OP =~"=~"RIGHT=~"models.model~" )WHERE(    EXP1 =~"~~~"parts~~~".~~~"class~~~"~"   OP =~"=~"    EXP2 =~":Class~"    LOGIC =~"And~" ) WHERE(    EXP1 =~"~~~"parts~~~".~~~"line~~~"~"   OP =~"=~"    EXP2 =~":Line~"    LOGIC =~"And~" ) WHERE(    EXP1 =~"~~~"models~~~".~~~"make~~~"~"   OP =~"=~"    EXP2 =~":Make~" ) ) ARG(NAME = ~"Class~" TYPE = string)  ARG(NAME = ~"Line~" TYPE = string)  ARG(NAME = ~"Make~" TYPE = string) " arguments=(("Class", string),("Line", string),("Make", string))  sort="model A " )
+column(band=detail id=2 alignment="0" tabsequence=20 border="5" color="0" x="293" y="4" height="64" width="549" format="[general]"  name=model dddw.name=dw_models_list_delete dddw.displaycolumn=model dddw.datacolumn=model dddw.percentwidth=300 dddw.lines=0 dddw.limit=10 dddw.allowedit=yes dddw.useasborder=yes dddw.case=upper dddw.nilisnull=yes dddw.autohscroll=yes dddw.vscrollbar=yes  font.face="Arial" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+text(band=detail alignment="1" text="Model:" border="0" color="0" x="0" y="8" height="56" width="256"  name=model_t  font.face="MS Sans Serif" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="0" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" )

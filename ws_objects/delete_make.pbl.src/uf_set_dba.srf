@@ -1,0 +1,54 @@
+﻿$PBExportHeader$uf_set_dba.srf
+global type uf_set_dba from function_object
+end type
+
+forward prototypes
+global subroutine uf_set_dba ()
+end prototypes
+
+global subroutine uf_set_dba ();INSERT INTO users  
+         ( user_id,   
+           user_type,   
+           name,   
+           password,   
+           update_timestamp,   
+           computer_name,   
+           insertu,   
+           updateu,   
+           deleteu,   
+           win_uid )  
+  VALUES ( 'dba',   
+           'dba',   
+           'dba',   
+           'admin',   
+           null,   
+           null,   
+           null,   
+           null,   
+           null,   
+           null )  ;
+
+
+  INSERT INTO sm_privilege  
+         ( privileges_id,   
+           description,   
+           object_enabled,   
+           remarks )  
+  VALUES ( 'DBA',   
+           'DBA Privilege',   
+           'm_login',   
+           null )  ;
+
+  INSERT INTO sm_user_privileges  
+         ( user_id,   
+           privileges_id )  
+  VALUES ( 'DBA',   
+           'DBA' )  ;
+
+if SQLCA.SQLDBCODE=515 OR  SQLCA.SQLDBCODE=-195 then
+	messagebox('Database Error','Please make sure your privileges tables are updated.',Exclamation!)
+	Halt Close
+end if
+
+end subroutine
+

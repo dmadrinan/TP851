@@ -1,0 +1,24 @@
+﻿$PBExportHeader$uf_dw_sync_colwidth.srf
+global type uf_dw_sync_colwidth from function_object
+end type
+
+forward prototypes
+global subroutine uf_dw_sync_colwidth (datawindow adw_source, datawindow adw_dest)
+end prototypes
+
+global subroutine uf_dw_sync_colwidth (datawindow adw_source, datawindow adw_dest);// Synchronize column width between two datawindows
+// Resize column width of destination datawindow adw_dest with source datawindow adw_source
+int li_cols, li_index
+
+if Lower(adw_source.Object.DataWindow.Syntax.Modified)=Lower('Yes') then
+	li_cols = Integer(adw_source.Object.DataWindow.Column.Count)
+	for li_index = 1 to li_cols
+		adw_dest.Modify("#" + string(li_index) + ".x='" + adw_source.Describe("#" + string(li_index) + ".x") + "'")
+		adw_dest.Modify("#" + string(li_index) + ".width='" + adw_source.Describe("#" + string(li_index) + ".width") + "'")
+	next
+    adw_source.Object.DataWindow.Syntax.Modified='No' //reset flag
+end if
+
+
+end subroutine
+

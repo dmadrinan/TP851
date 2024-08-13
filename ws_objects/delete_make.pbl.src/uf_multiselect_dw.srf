@@ -1,0 +1,60 @@
+﻿$PBExportHeader$uf_multiselect_dw.srf
+global type uf_multiselect_dw from function_object
+end type
+
+forward prototypes
+global subroutine uf_multiselect_dw (datawindow adw, long row)
+end prototypes
+
+global subroutine uf_multiselect_dw (datawindow adw, long row);boolean lb_selected
+long ll_startrow, il_startrow
+ // Test to determine if row clicked while user is holding the 
+ // control key and the shift key - if so - select all rows.
+ IF row > 0 THEN
+	il_startrow = Long(adw.Tag)
+	IF KeyDown(KeyControl!) THEN
+		IF adw.isSelected(row) THEN
+			adw.SelectRow(row, False)
+		ELSE
+			adw.SelectRow(row, True)
+			il_startrow = row
+			adw.Tag = string(il_startrow)
+		END IF
+		Return
+	ELSE			
+		// test to determine if mouse button was clicked while the user held the shift key down
+		IF KeyDown(KeyShift!) THEN
+			//Set boolean variable to indicate if clicked row was selected.
+			lb_selected	= adw.isSelected(row)
+			
+			// IF start row number is less than current row selected then incrementally 
+			// select all rows from the first row selected to the last row selected.
+			IF il_startRow < row THEN
+				For ll_startrow = il_startrow to row
+					adw.SelectRow(ll_startrow, True)	
+				NEXT
+			ELSE
+			// IF start row number is greater than current row selected then decrementally 
+			// select all rows from the first row selected to the last row selected.
+				For ll_startrow = il_startrow to row Step -1
+					adw.SelectRow(ll_startrow, True)	
+				NEXT
+			END IF	
+		ELSE
+			// IF no keys were pressed when the user clicked the mouse button
+			// select or deselect the row depending upon the current status of the row.
+			adw.SelectRow(0, False)
+		
+			IF lb_selected THEN
+				adw.SelectRow(row, False)
+				SetNull(il_startrow)
+			ELSE
+				adw.SelectRow(row, True)
+				il_startrow = row
+			END IF
+		END IF
+	END IF
+	adw.Tag = string(il_startrow)
+END IF
+end subroutine
+

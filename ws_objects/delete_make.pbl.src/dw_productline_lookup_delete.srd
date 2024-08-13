@@ -1,0 +1,14 @@
+﻿$PBExportHeader$dw_productline_lookup_delete.srd
+$PBExportComments$Data window containing dddw for lookup up product line codes.
+release 7;
+datawindow(units=0 timer_interval=0 color=79741120 processing=0 HTMLDW=no print.documentname="" print.orientation = 0 print.margin.left = 110 print.margin.right = 110 print.margin.top = 97 print.margin.bottom = 97 print.paper.source = 0 print.paper.size = 0 print.prompt=no print.buttons=no print.preview.buttons=no )
+summary(height=4 color="536870912" )
+footer(height=0 color="536870912" )
+detail(height=80 color="536870912" )
+table(column=(type=char(10) updatewhereclause=yes name=class dbname="product_lines.class" )
+ column=(type=char(10) updatewhereclause=yes name=line dbname="product_lines.line" )
+ retrieve="PBSELECT( VERSION(400) TABLE(NAME=~"product_lines~" ) COLUMN(NAME=~"product_lines.class~") COLUMN(NAME=~"product_lines.line~")WHERE( EXP1 =~"~~~"product_lines~~~".~~~"class~~~"~" OP =~"=~" EXP2 =~":Class~" ) ) ARG(NAME = ~"Class~" TYPE = string) " filter=" line <> '     '" arguments=(("Class", string))  sort="line A " )
+column(band=detail id=2 alignment="0" tabsequence=20 border="5" color="0" x="219" y="4" height="64" width="549" format="[general]"  name=line dddw.name=dw_productlines_list_delete dddw.displaycolumn=line dddw.datacolumn=line dddw.percentwidth=300 dddw.lines=0 dddw.limit=10 dddw.allowedit=yes dddw.useasborder=yes dddw.case=upper dddw.nilisnull=yes dddw.autohscroll=yes dddw.vscrollbar=yes  font.face="Arial" font.height="-10" font.weight="400"  font.family="2" font.pitch="2" font.charset="0" background.mode="2" background.color="16777215" )
+text(band=detail alignment="1" text="Line:" border="0" color="0" x="37" y="8" height="56" width="146"  name=line_t  font.face="MS Sans Serif" font.height="-8" font.weight="700"  font.family="2" font.pitch="2" font.charset="0" background.mode="1" background.color="536870912" )
+htmltable(border="0" )
+htmlgen(clientevents="1" clientvalidation="1" clientcomputedfields="1" clientformatting="0" clientscriptable="0" generatejavascript="1" )

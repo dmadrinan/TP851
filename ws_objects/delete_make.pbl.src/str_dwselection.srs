@@ -1,0 +1,15 @@
+﻿$PBExportHeader$str_dwselection.srs
+global type str_dwselection from structure
+	datawindow		dw_input
+	string		s_type
+	string		s_title
+	string		s_dataobject
+	long		l_column_no
+	string		s_arg1
+	datawindowchild		dwc_input
+	string		sa_selection[]
+	string		s_code_concat
+	string		s_desc_concat
+	string		s_column_name
+end type
+

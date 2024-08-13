@@ -1,0 +1,34 @@
+﻿$PBExportHeader$p_delete_make_exe.srj
+$PBExportComments$Generated Application Executable Project
+EXE:delete_make.exe,,0,1,1,0,C:\Program Files (x86)\Appeon\Common\PowerBuilder\Runtime 21.0.0.1509
+CMP:0,0,0,2,0,0,1
+COM:Solenium Group Inc.
+DES:Talking Pictures Automotive Catalog - Delete Make Product File
+CPY:Copyright © 1995-2024 Solenium Group Inc.  All rights reserved.
+PRD:Talking Pictures Automotive Catalog - Delete Make
+PVS:8,5,1,0
+PVN:8,5,1,0
+FVS:8,5,1,0
+FVN:8,5,1,0
+MAN:0,asInvoker,0
+PBD:delete_make.pbl,,1
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,w_retrieve_pleasewait,w
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,dw_productclasses_list_delete,d
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,delete_make,a
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,w_delete_pleasewait,w
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,dw_productlines_list_delete,d
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,uf_getdbuser,f
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,uf_check_path,f
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,uf_commandline_parm,f
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,dw_models_list_delete,d
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,w_delete_make,w
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,w_main,w
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,uf_dw_sync_colwidth,f
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,dw_makes_list_delete,d
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,uf_dw_filter_hdvin,f
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,w_generic_dwselection,w
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,str_dwselection,s
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,w_delete_parts,w
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,mnu_main,m
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,uf_geterrorpath,f
+OBJ:G:\Talking Pictures\TP_SQLSERVER_2021\Delete Make Program\delete_make.pbl,uf_multiselect_dw,f

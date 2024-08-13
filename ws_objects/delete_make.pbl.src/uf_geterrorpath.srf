@@ -1,0 +1,75 @@
+﻿$PBExportHeader$uf_geterrorpath.srf
+global type uf_geterrorpath from function_object
+end type
+
+forward prototypes
+global subroutine uf_geterrorpath (ref string as_errorpath, ref string as_resultpath)
+end prototypes
+
+global subroutine uf_geterrorpath (ref string as_errorpath, ref string as_resultpath);
+/****************** ********************************************************
+Run ErrorPath.Exe to write error path to INI file, then get the error path from INI file
+
+When copying this function to other utilities, we need change the value of ls_from and ls_lastfoldername
+For Example, In Flattener:
+	ls_from = "Flattener", ls_lastfoldername = "Flattener_Errors"
+	
+If the utility do not have gs_userid, then replace gs_userid with 'dba'
+***************************************************************************/
+String ls_uid, ls_return, ls_ini_path, ls_from, ls_lastfoldername
+Int li_max_sleep
+
+If NOT FileExists(gs_path+ "\ErrorPath.Exe") Then
+	as_errorpath = gs_path
+	as_resultpath = gs_path
+	
+	// add this IF statement to bye pass MessageBox if calling from Command Line.
+	IF Not gb_FromCommandLine Then
+		IF uf_check_path(gs_path) <> '' THen
+			If IsValid(w_pleasewait) Then Close(w_pleasewait)
+			MessageBox("Warning", '“ErrorPath.exe” does not exist in Talking Pictures folder and specified folder is Write Protected.  ~r~n' + &
+											'In order to generate and save Error Logs “ErrorPath.exe” must exist and Talking Pictures folder must not be Write Protected.  ~r~n' + &
+											'Currently Talking Pictures is not capable of creating Error Log Files.', Exclamation!)
+		ELSE
+			If IsValid(w_pleasewait) Then Close(w_pleasewait)
+			MessageBox("Warning", '“ErrorPath.exe” does not exist in Talking Pictures folder.  ~r~n' + &
+											'In order to generate and save Error Logs “ErrorPath.exe” must exist.  ~r~n' + &
+											'Currently some of Talking Pictures features are ignored and Error Logs are created within Talking Pictures folder.', Exclamation!)
+		END IF
+	END IF
+	Return
+End If
+
+ls_from = "TP"
+ls_lastfoldername = "Errors"
+
+//Run( gs_path+ "\ErrorPath.Exe " + ls_from + "|" + gs_dbUser + "|" + gs_dbPwd + "|" + gs_userid + "|" + ls_lastfoldername, Minimized!)
+Run( gs_path+ "\ErrorPath.Exe " + ls_from + "|" + gs_dbUser + "|" + gs_dbPwd + &
+		+ "|" + gs_userid + "|" + ls_lastfoldername + "|" + gs_ServerName + "|" + gs_tp_profile , Minimized!)
+Sleep(1)
+
+ls_ini_path=gs_path+"\Talkpic.ini"
+
+Do While ProfileString ( ls_ini_path , 'Talking Pictures', ls_from+'_'+gs_userid+'_ePath', '' ) = '' and li_max_sleep < 3
+	Sleep(1)
+	li_max_sleep ++
+Loop 
+
+IF ProfileString ( ls_ini_path , 'Talking Pictures', ls_from+'_'+gs_userid+'_ePath', '' ) = '' THEN
+	as_errorpath = gs_path
+	as_resultpath = gs_path
+ELSE
+	as_errorpath = ProfileString(ls_ini_path, 'Talking Pictures', ls_from + '_' + gs_userid + '_ePath', gs_path)
+	as_resultpath = Left(as_errorpath, Len(as_errorpath) - Len(ls_lastfoldername) - 1)
+END IF
+
+IF uf_check_path(as_errorpath) <> '' THen
+	IF Not gb_FromCommandLine Then
+		MessageBox("Warning", 'Error Path folder ' + as_errorpath + ' must exist and not be Write Protected.  ~r~n' + &
+										'Currently Talking Pictures is not capable of creating Error Log Files.', Exclamation!)
+	END IF
+END IF
+
+Return
+end subroutine
+

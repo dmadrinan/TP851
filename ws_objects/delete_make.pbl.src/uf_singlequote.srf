@@ -1,0 +1,19 @@
+﻿$PBExportHeader$uf_singlequote.srf
+global type uf_SingleQuote from function_object
+end type
+
+forward prototypes
+global function string uf_singlequote (string thestring)
+end prototypes
+
+global function string uf_singlequote (string thestring);integer position
+position=1
+do until position=0
+	position=pos(TheString,"'", position)
+	if position>0 then thestring = Replace(thestring, position, 1, "~~'")
+	position=pos(TheString,"'", position + 2)
+loop 	
+
+return theString
+end function
+

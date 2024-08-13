@@ -1,0 +1,59 @@
+﻿$PBExportHeader$uf_dw_filter_hdvin.srf
+global type uf_dw_filter_hdvin from function_object
+end type
+
+forward prototypes
+global subroutine uf_dw_filter_hdvin (datawindow adw_filter, datawindow adw_source, string as_existing_filter_string)
+end prototypes
+
+global subroutine uf_dw_filter_hdvin (datawindow adw_filter, datawindow adw_source, string as_existing_filter_string);// KH20160229 ///
+/// Purpose: This function get the value of columns from filter datawindow and FILTER the target datawindow.
+///
+//use evaluate to get the displayed value, then we do not need to check the format of date
+//use lookupdisplay to get the displayed value in case of DROPDOWN datawindow 
+
+
+string ls_filter
+string ls_col_filter
+string ls_filter_expression
+int li_index, li_cols
+
+li_cols = Integer(adw_filter.Object.DataWindow.Column.Count)
+
+for li_index = 1 to li_cols
+	ls_col_filter = adw_filter.Describe("evaluate('lookupdisplay(#" + string(li_index) + ")',1)")
+	
+	IF isNull (ls_col_filter ) or ls_col_filter = '' Then Continue
+	
+	If adw_filter.Describe("#" + string(li_index) + ".dddw.Name") <> '?' or adw_filter.Describe("#" + string(li_index) + ".ddlb.Case") <> '?' or &
+		Pos(Upper(adw_filter.Describe("#" + string(li_index) + ".ColType")), 'DATE') > 0 or Pos(Upper(adw_filter.Describe("#" + string(li_index) + ".ColType")), 'TIME') > 0 Then
+		ls_filter_expression = "upper( describe( 'evaluate(~~'lookupdisplay(#" + string(li_index) + ")~~', ' + string(getrow()) + ')' ) ) like '"+upper(ls_col_filter)+ ""
+	Else
+		ls_filter_expression = "upper( #" + string(li_index) + ") like '"+upper(ls_col_filter)+ ""
+	End If
+	
+	if Trim(ls_filter)=''  or isnull(ls_filter) then
+		ls_filter=ls_filter_expression 
+		ls_filter=ls_filter + "%"  +"'"
+	else
+		ls_filter= "(" + ls_filter + ")" 
+		ls_filter=ls_filter + " AND ( " + ls_filter_expression + "%"  +"')"
+	end if
+next
+
+IF as_existing_filter_string <> '' Then
+	IF ls_filter <> '' Then
+		ls_filter = as_existing_filter_string + " And " + ls_filter
+	ELSE
+		ls_filter = as_existing_filter_string
+	END IF
+
+END IF
+
+adw_source.SetFilter(ls_filter)
+adw_source.Filter()
+//
+
+
+end subroutine
+
