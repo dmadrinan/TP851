@@ -24,7 +24,8 @@ string gs_filename
 //String gs_OLEDBDriver = "MSOLEDBSQL"
 String gs_OLEDBDriver = "SQLOLEDB"
 
-string gs_aces_profile
+string gs_aces_profile, gs_spid
+
 end variables
 
 shared variables
@@ -38,14 +39,21 @@ string themename = "Do Not Use Themes"
 boolean nativepdfvalid = false
 boolean nativepdfincludecustomfont = false
 string nativepdfappname = ""
-long richtextedittype = 2
-long richtexteditx64type = 3
-long richtexteditversion = 1
+long richtextedittype = 5
+long richtexteditx64type = 5
+long richtexteditversion = 3
 string richtexteditkey = ""
 string appicon = "DeleteData.ico"
 string appruntimeversion = "22.2.0.3356"
 boolean manualsession = false
 boolean unsupportedapierror = false
+boolean ultrafast = false
+boolean bignoreservercertificate = false
+uint ignoreservercertificate = 0
+long webview2distribution = 0
+boolean webview2checkx86 = false
+boolean webview2checkx64 = false
+string webview2url = "https://developer.microsoft.com/en-us/microsoft-edge/webview2/"
 end type
 global delete_make delete_make
 
@@ -135,7 +143,7 @@ if isnull(gs_userid) or gs_userid = '' then
 		//For Audit Log Purposes
 		SELECT Top 1 @@spid Into :ll_spid From system_table;
 		
-		
+		gs_spid = String(ll_spid)
 		Insert into Users_Sessions 
 				( spid, User_ID )
 		Values ( :ll_spid, :ls_userid );

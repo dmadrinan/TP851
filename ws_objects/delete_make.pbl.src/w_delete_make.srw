@@ -3620,7 +3620,7 @@ w_pleasewait.st_1.Text = 'Deleting data, please wait ...'
 
 EnableAudit( )
 
-ls_sql =  "Execute sp_bulk_delete '" + ls_profile +"'" 
+ls_sql =  "Execute sp_bulk_delete '" + ls_profile +"', '', '" + gs_spid + "', 'False' " 
 li_return = wf_execute_sql ( ls_sql , "Error while executing Bulk Delete. Review Error: ", SQLCA ) 
 
 If li_return = -1 Then
