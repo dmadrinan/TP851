@@ -2,6 +2,12 @@
 forward
 global type w_delete_make from window
 end type
+type rb_uncheck_all from radiobutton within w_delete_make
+end type
+type rb_check_all from radiobutton within w_delete_make
+end type
+type gb_8 from groupbox within w_delete_make
+end type
 type cb_reset from commandbutton within w_delete_make
 end type
 type dw_profile_master from datawindow within w_delete_make
@@ -147,6 +153,9 @@ long backcolor = 79741120
 string icon = "DeleteData.ico"
 boolean center = true
 event ue_postopen ( )
+rb_uncheck_all rb_uncheck_all
+rb_check_all rb_check_all
+gb_8 gb_8
 cb_reset cb_reset
 dw_profile_master dw_profile_master
 dw_profile dw_profile
@@ -1717,6 +1726,9 @@ PostEvent ( 'ue_postopen' )
 end event
 
 on w_delete_make.create
+this.rb_uncheck_all=create rb_uncheck_all
+this.rb_check_all=create rb_check_all
+this.gb_8=create gb_8
 this.cb_reset=create cb_reset
 this.dw_profile_master=create dw_profile_master
 this.dw_profile=create dw_profile
@@ -1782,7 +1794,10 @@ this.gb_vendor=create gb_vendor
 this.gb_brand=create gb_brand
 this.gb_6=create gb_6
 this.gb_7=create gb_7
-this.Control[]={this.cb_reset,&
+this.Control[]={this.rb_uncheck_all,&
+this.rb_check_all,&
+this.gb_8,&
+this.cb_reset,&
 this.dw_profile_master,&
 this.dw_profile,&
 this.cb_delete_profile,&
@@ -1850,6 +1865,9 @@ this.gb_7}
 end on
 
 on w_delete_make.destroy
+destroy(this.rb_uncheck_all)
+destroy(this.rb_check_all)
+destroy(this.gb_8)
 destroy(this.cb_reset)
 destroy(this.dw_profile_master)
 destroy(this.dw_profile)
@@ -1916,6 +1934,112 @@ destroy(this.gb_brand)
 destroy(this.gb_6)
 destroy(this.gb_7)
 end on
+
+type rb_uncheck_all from radiobutton within w_delete_make
+integer x = 1403
+integer y = 2320
+integer width = 402
+integer height = 84
+integer textsize = -8
+integer weight = 700
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "MS Sans Serif"
+long backcolor = 79741120
+string text = "Uncheck All"
+end type
+
+event clicked;
+If Checked Then
+	cbx_all_make_del.checked = False
+	cbx_all_make_del.TriggerEvent(Clicked!)
+	cbx_class.checked = False
+	cbx_class.TriggerEvent(Clicked!)
+	cbx_make.checked = False
+	cbx_make.TriggerEvent(Clicked!)
+	cbx_all_models_del.checked = False
+	cbx_line.checked = False
+	cbx_line.TriggerEvent(Clicked!)
+	cbx_model.checked = False
+	cbx_model.TriggerEvent(Clicked!)
+	cbx_modelgroup_print.checked = False
+	cbx_modelgroup_inquiry.checked = False
+	cbx_app_ftnt_def.checked = False
+	cbx_app_spec_temp.checked = False
+	cbx_parts.checked = False
+	cbx_parts.TriggerEvent(Clicked!)
+	cbx_part_ftnt_def.checked = False
+	cbx_part_ftnt_def.TriggerEvent(Clicked!)
+	cbx_part_spec_temp.checked = False
+	cbx_part_spec_temp.TriggerEvent(Clicked!)
+	cbx_part_ftnt_attachments.checked = False
+	cbx_part_spec_value.checked = False
+	cbx_part_interchange.checked = False
+End If
+end event
+
+type rb_check_all from radiobutton within w_delete_make
+integer x = 974
+integer y = 2320
+integer width = 402
+integer height = 84
+integer textsize = -8
+integer weight = 700
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "MS Sans Serif"
+long backcolor = 79741120
+string text = "Check All"
+boolean checked = true
+end type
+
+event clicked;
+If Checked Then
+	
+	cbx_part_ftnt_attachments.checked = True
+	cbx_part_spec_value.checked = True
+	cbx_part_interchange.checked = True
+	cbx_part_spec_temp.checked = True
+	cbx_part_spec_temp.TriggerEvent(Clicked!)
+	cbx_part_ftnt_def.checked = True
+	cbx_part_ftnt_def.TriggerEvent(Clicked!)
+	cbx_parts.checked = True
+	cbx_parts.TriggerEvent(Clicked!)
+	cbx_modelgroup_print.checked = True
+	cbx_modelgroup_inquiry.checked = True
+	cbx_app_ftnt_def.checked = True
+	cbx_app_spec_temp.checked = True
+	cbx_model.checked = True
+	cbx_model.TriggerEvent(Clicked!)
+	cbx_line.checked = True
+	cbx_line.TriggerEvent(Clicked!)
+	cbx_all_models_del.checked = True
+	cbx_make.checked = True
+	cbx_make.TriggerEvent(Clicked!)
+	cbx_class.checked = True
+	cbx_class.TriggerEvent(Clicked!)	
+	cbx_all_make_del.checked = True
+	cbx_all_make_del.TriggerEvent(Clicked!)
+
+End If
+end event
+
+type gb_8 from groupbox within w_delete_make
+integer x = 910
+integer y = 2284
+integer width = 960
+integer height = 140
+integer taborder = 270
+integer textsize = -8
+integer weight = 700
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "MS Sans Serif"
+long backcolor = 79741120
+end type
 
 type cb_reset from commandbutton within w_delete_make
 integer x = 3077
@@ -2492,13 +2616,18 @@ lstr.s_type = "multi"
 openwithparm(w_generic_dwselection, lstr)
 wf_loadbrand()
 
-dw_class.Retrieve(is_Vendor, is_Brand)
-if cbx_all_class.Checked then
-	if dw_class.RowCount() > 0 then
-		dw_class.SelectRow(0, TRUE)
-	end if
-	dw_class.Enabled = FALSE
-end if
+dw_Make.Retrieve( is_Vendor, is_Brand, is_Class, is_Line )
+
+Cb_save.enabled = TRUE
+ib_Make_modified = TRUE 
+
+//dw_class.Retrieve(is_Vendor, is_Brand)
+//if cbx_all_class.Checked then
+//	if dw_class.RowCount() > 0 then
+//		dw_class.SelectRow(0, TRUE)
+//	end if
+//	dw_class.Enabled = FALSE
+//end if
 end event
 
 type cbx_all_brand from checkbox within w_delete_make
@@ -2746,7 +2875,12 @@ lstr.s_type = "multi"
 openwithparm(w_generic_dwselection, lstr)
 wf_loadvendor()
 
-dw_brand.Retrieve(is_Vendor)
+dw_Brand.Retrieve( is_class, is_line, is_vendor )
+dw_Make.Retrieve( is_vendor, is_brand, is_Class, is_Line )
+
+Cb_save.enabled = TRUE
+ib_Vendor_modified = TRUE 
+
 if cbx_all_brand.Checked then
 	if dw_brand.RowCount() > 0 then
 		dw_brand.SelectRow(0, TRUE)
@@ -2873,7 +3007,13 @@ lstr.s_type = "multi"
 openwithparm(w_generic_dwselection, lstr)
 wf_loadline()
 
-dw_make.Retrieve(is_Vendor, is_Brand, is_class, is_line)
+dw_Vendor.Retrieve( is_Class, is_Line )
+dw_Brand.Retrieve( is_Class, is_Line, is_vendor )
+dw_Make.Retrieve( is_vendor, is_brand, is_Class, is_Line )
+
+Cb_save.enabled = TRUE
+ib_Line_modified = TRUE 
+
 if cbx_all_makes.Checked then
 	if dw_make.RowCount() > 0 then
 		dw_make.SelectRow(0, TRUE)
@@ -3030,7 +3170,7 @@ end event
 
 type cbx_all_models_del from checkbox within w_delete_make
 integer x = 3442
-integer y = 2728
+integer y = 2748
 integer width = 1033
 integer height = 64
 boolean bringtotop = true
@@ -3048,7 +3188,7 @@ end type
 
 type cbx_all_make_del from checkbox within w_delete_make
 integer x = 3442
-integer y = 2648
+integer y = 2668
 integer width = 1019
 integer height = 64
 boolean bringtotop = true
@@ -3187,7 +3327,7 @@ end event
 
 type cbx_model from checkbox within w_delete_make
 integer x = 2674
-integer y = 2488
+integer y = 2508
 integer width = 416
 integer height = 64
 integer textsize = -8
@@ -3217,7 +3357,7 @@ end event
 
 type cbx_make from checkbox within w_delete_make
 integer x = 2674
-integer y = 2408
+integer y = 2428
 integer width = 416
 integer height = 64
 integer textsize = -8
@@ -3252,7 +3392,7 @@ end event
 
 type cbx_part_spec_value from checkbox within w_delete_make
 integer x = 219
-integer y = 2728
+integer y = 2748
 integer width = 1070
 integer height = 64
 integer textsize = -8
@@ -3269,7 +3409,7 @@ end type
 
 type cbx_part_spec_temp from checkbox within w_delete_make
 integer x = 219
-integer y = 2648
+integer y = 2668
 integer width = 1161
 integer height = 64
 integer textsize = -8
@@ -3303,7 +3443,7 @@ end event
 
 type cbx_part_ftnt_attachments from checkbox within w_delete_make
 integer x = 219
-integer y = 2568
+integer y = 2588
 integer width = 827
 integer height = 64
 integer textsize = -8
@@ -3320,7 +3460,7 @@ end type
 
 type cbx_part_ftnt_def from checkbox within w_delete_make
 integer x = 219
-integer y = 2488
+integer y = 2508
 integer width = 827
 integer height = 64
 integer textsize = -8
@@ -3354,7 +3494,7 @@ end event
 
 type cbx_line from checkbox within w_delete_make
 integer x = 3442
-integer y = 2476
+integer y = 2496
 integer width = 416
 integer height = 64
 integer textsize = -8
@@ -3374,7 +3514,7 @@ end event
 
 type cbx_class from checkbox within w_delete_make
 integer x = 3442
-integer y = 2396
+integer y = 2416
 integer width = 416
 integer height = 64
 integer textsize = -8
@@ -3396,7 +3536,7 @@ end event
 
 type cbx_parts from checkbox within w_delete_make
 integer x = 219
-integer y = 2408
+integer y = 2428
 integer width = 827
 integer height = 64
 integer textsize = -8
@@ -3967,9 +4107,9 @@ end type
 
 type gb_5 from groupbox within w_delete_make
 integer x = 110
-integer y = 2328
+integer y = 2324
 integer width = 4901
-integer height = 584
+integer height = 604
 integer textsize = -8
 integer weight = 700
 fontpitch fontpitch = variable!
@@ -3983,7 +4123,7 @@ end type
 
 type cbx_part_interchange from checkbox within w_delete_make
 integer x = 219
-integer y = 2808
+integer y = 2828
 integer width = 827
 integer height = 64
 boolean bringtotop = true
@@ -4001,7 +4141,7 @@ end type
 
 type cbx_app_ftnt_def from checkbox within w_delete_make
 integer x = 1563
-integer y = 2408
+integer y = 2428
 integer width = 827
 integer height = 64
 boolean bringtotop = true
@@ -4019,7 +4159,7 @@ end type
 
 type cbx_app_spec_temp from checkbox within w_delete_make
 integer x = 1563
-integer y = 2488
+integer y = 2508
 integer width = 754
 integer height = 64
 boolean bringtotop = true
@@ -4037,7 +4177,7 @@ end type
 
 type cbx_modelgroup_print from checkbox within w_delete_make
 integer x = 2674
-integer y = 2648
+integer y = 2668
 integer width = 677
 integer height = 64
 boolean bringtotop = true
@@ -4055,7 +4195,7 @@ end type
 
 type cbx_modelgroup_inquiry from checkbox within w_delete_make
 integer x = 2674
-integer y = 2728
+integer y = 2748
 integer width = 677
 integer height = 64
 boolean bringtotop = true
@@ -4139,7 +4279,7 @@ type gb_6 from groupbox within w_delete_make
 integer x = 110
 integer y = 324
 integer width = 4901
-integer height = 1972
+integer height = 1964
 integer taborder = 20
 integer textsize = -8
 integer weight = 700
