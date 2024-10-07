@@ -38,7 +38,7 @@ type dw_make_filter from datawindow within w_delete_make
 end type
 type dw_class_filter from datawindow within w_delete_make
 end type
-type pb_1 from picturebutton within w_delete_make
+type pb_brand from picturebutton within w_delete_make
 end type
 type cbx_all_brand from checkbox within w_delete_make
 end type
@@ -171,7 +171,7 @@ st_8 st_8
 dw_model_filter dw_model_filter
 dw_make_filter dw_make_filter
 dw_class_filter dw_class_filter
-pb_1 pb_1
+pb_brand pb_brand
 cbx_all_brand cbx_all_brand
 dw_brand dw_brand
 dw_brand_filter dw_brand_filter
@@ -1703,6 +1703,12 @@ If ab_enabled = False Then
 	dw_make.enabled = ab_enabled
 	dw_model.enabled = ab_enabled
 	cbx_all_class.enabled = ab_enabled
+	pb_class.enabled = ab_enabled
+	pb_line.enabled = ab_enabled
+	pb_vendor.enabled = ab_enabled
+	pb_brand.enabled = ab_enabled
+	pb_make.enabled = ab_enabled
+	pb_model.enabled = ab_enabled
 Else
 	dw_profile_master.enabled = ab_enabled
 //	dw_class.enabled = ab_enabled
@@ -1744,7 +1750,7 @@ this.st_8=create st_8
 this.dw_model_filter=create dw_model_filter
 this.dw_make_filter=create dw_make_filter
 this.dw_class_filter=create dw_class_filter
-this.pb_1=create pb_1
+this.pb_brand=create pb_brand
 this.cbx_all_brand=create cbx_all_brand
 this.dw_brand=create dw_brand
 this.dw_brand_filter=create dw_brand_filter
@@ -1812,7 +1818,7 @@ this.st_8,&
 this.dw_model_filter,&
 this.dw_make_filter,&
 this.dw_class_filter,&
-this.pb_1,&
+this.pb_brand,&
 this.cbx_all_brand,&
 this.dw_brand,&
 this.dw_brand_filter,&
@@ -1883,7 +1889,7 @@ destroy(this.st_8)
 destroy(this.dw_model_filter)
 destroy(this.dw_make_filter)
 destroy(this.dw_class_filter)
-destroy(this.pb_1)
+destroy(this.pb_brand)
 destroy(this.cbx_all_brand)
 destroy(this.dw_brand)
 destroy(this.dw_brand_filter)
@@ -2282,6 +2288,7 @@ dw_class.selectrow( 0,false)
 wf_reset_profile()
 ib_new_profile = true
 cbx_all_class.Enabled = True
+pb_class.Enabled = True
 
 
 
@@ -2592,7 +2599,7 @@ If cbx_all_class.checked Then
 End If
 end event
 
-type pb_1 from picturebutton within w_delete_make
+type pb_brand from picturebutton within w_delete_make
 integer x = 1559
 integer y = 1412
 integer width = 105
@@ -2606,9 +2613,12 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Arial"
 string picturename = "SelectAll!"
+string disabledname = "Border3DLowered1!"
 end type
 
 event clicked;str_dwselection lstr
+
+If dw_brand.Rowcount( ) = 0 Then Return
 
 lstr.dw_input = dw_brand
 lstr.s_type = "multi"
@@ -2660,10 +2670,12 @@ dw_brand.Filter( )
 IF Checked then
 	dw_Brand.SelectRow(0, TRUE)
 	dw_Brand.Enabled = FALSE
+	pb_Brand.Enabled = FALSE
 	is_Brand [1] = '|ALL|'
 Else
 	dw_Brand.SelectRow(0, FALSE)
 	dw_Brand.Enabled = TRUE
+	pb_Brand.Enabled = TRUE
 	is_Brand [1] = '|ALL|'
 End if
 
@@ -2690,8 +2702,10 @@ event retrieveend;String ls_empty[1]
 
 IF rowcount = 0 Then
 	cbx_all_brand.Enabled = False
+	pb_brand.Enabled = False
 Else
 	cbx_all_brand.Enabled = True
+	pb_brand.Enabled = True
 END IF
 
 cbx_all_brand.Checked = False
@@ -2800,6 +2814,19 @@ ib_Vendor_modified = TRUE
 
 end event
 
+event retrieveend;
+IF rowcount = 0 Then
+	cbx_all_vendor.Enabled = False
+	pb_vendor.Enabled = False
+Else
+	cbx_all_vendor.Enabled = True
+	pb_vendor.Enabled = True
+END IF
+
+cbx_all_vendor.Checked = False
+This.Enabled = True
+end event
+
 type cbx_all_vendor from checkbox within w_delete_make
 integer x = 4791
 integer y = 952
@@ -2833,10 +2860,12 @@ is_Brand[1] = '|ALL|'
 IF Checked then
 	dw_Vendor.SelectRow(0, TRUE)
 	dw_Vendor.Enabled = FALSE
+	pb_Vendor.Enabled = FALSE
 	is_Vendor [1] = '|ALL|'
 Else
 	dw_Vendor.SelectRow(0, FALSE)
 	dw_Vendor.Enabled = TRUE
+	pb_Vendor.Enabled = TRUE
 	is_Vendor [1] = '|ALL|'
 End if
 
@@ -2865,9 +2894,12 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Arial"
 string picturename = "SelectAll!"
+string disabledname = "Border3DLowered1!"
 end type
 
 event clicked;str_dwselection lstr
+
+If dw_vendor.Rowcount( ) = 0 Then Return
 
 lstr.dw_input = dw_vendor
 lstr.s_type = "multi"
@@ -2925,9 +2957,12 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Arial"
 string picturename = "SelectAll!"
+string disabledname = "Border3DLowered1!"
 end type
 
 event clicked;str_dwselection lstr
+
+If dw_make.Rowcount( ) = 0 Then Return
 
 lstr.dw_input = dw_make
 lstr.s_type = "multi"
@@ -2958,9 +2993,12 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Arial"
 string picturename = "SelectAll!"
+string disabledname = "Border3DLowered1!"
 end type
 
 event clicked;str_dwselection lstr
+
+If dw_model.Rowcount( ) = 0 Then Return
 
 lstr.dw_input = dw_model
 lstr.s_type = "multi"
@@ -2997,9 +3035,12 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Arial"
 string picturename = "SelectAll!"
+string disabledname = "Border3DLowered1!"
 end type
 
 event clicked;str_dwselection lstr
+
+If dw_line.Rowcount( ) = 0 Then Return
 
 lstr.dw_input = dw_line
 lstr.s_type = "multi"
@@ -3036,18 +3077,18 @@ fontpitch fontpitch = variable!
 fontfamily fontfamily = swiss!
 string facename = "Arial"
 string picturename = "SelectAll!"
+string disabledname = "Border3DLowered1!"
 end type
 
 event clicked;str_dwselection lstr
+
+If dw_class.Rowcount( ) = 0 Then Return
 
 lstr.dw_input = dw_class
 lstr.s_type = "multi"
 
 openwithparm(w_generic_dwselection, lstr)
 wf_loadclass()
-
-//dw_line.Retrieve(is_Vendor, is_Brand, is_class)
-
 
 dw_Line.Retrieve( is_Class )
 
@@ -3093,18 +3134,16 @@ dw_model.Filter( )
 IF Checked then
 	dw_Model.SelectRow(0, TRUE)
 	dw_Model.Enabled = FALSE
+	pb_Model.Enabled = FALSE
 	is_Model [1] = '|ALL|'
 	
 Else
 	dw_Model.SelectRow(0, FALSE)
 	dw_Model.Enabled = TRUE
+	pb_Model.Enabled = TRUE
 	is_Model [1] = ''
 	
 End if
-
-//dw_year_from.reset()
-//dw_year_to.reset()
-//wf_reset_year()
 
 dw_year_from.setitem( 1,1,'')
 dw_year_to.setitem( 1,1,'')
@@ -3152,12 +3191,12 @@ is_Model[1] = '|ALL|'
 IF Checked then
 	dw_Make.SelectRow(0, TRUE)
 	dw_Make.Enabled = FALSE
-	// Load '|ALL|'  into an array
+	pb_Make.Enabled = FALSE
 	is_Make [1] = '|ALL|'
 Else
 	dw_Make.SelectRow(0, FALSE)
 	dw_Make.Enabled = TRUE
-	// Load ''  into an array
+	pb_Make.Enabled = TRUE
 	is_Make [1] = ''
 End if
 
@@ -3248,10 +3287,12 @@ is_Brand[1] = '|ALL|'
 IF Checked then
 	dw_Line.SelectRow(0, TRUE)
 	dw_Line.Enabled = FALSE
+	pb_Line.Enabled = FALSE
 	is_Line [1] = '|ALL|'
 Else
 	dw_Line.SelectRow(0, FALSE)
 	dw_Line.Enabled = TRUE
+	pb_Line.Enabled = TRUE
 	is_Line [1] = ''
 End if
 
@@ -3303,10 +3344,12 @@ is_Brand[1] = '|ALL|'
 IF Checked then
 	dw_Class.SelectRow(0, TRUE)
 	dw_Class.Enabled = FALSE
+	pb_class.Enabled = FALSE
 	is_Class [1] = '|ALL|'
 Else
 	dw_Class.SelectRow(0, FALSE)
 	dw_Class.Enabled = TRUE
+	pb_Class.Enabled = TRUE
 	is_Class [1] = ''
 End if
 
@@ -3853,8 +3896,10 @@ event retrieveend;String ls_empty[1]
 
 IF rowcount = 0 Then
 	cbx_all_line.Enabled = False
+	pb_line.Enabled = False
 Else
 	cbx_all_line.Enabled = True
+	pb_line.Enabled = True
 END IF
 
 cbx_all_line.Checked = False
@@ -3925,10 +3970,12 @@ IF ib_new_profile or NOT f_IsNullorEmpty(ls_profile) Then
 	cbx_all_class.Enabled = True
 	dw_class.Enabled = True
 	dw_class_filter.Enabled = True
+	pb_class.Enabled = True
 ElseIf rowcount = 0 Then	
 	cbx_all_class.Enabled = False
 	dw_class.Enabled = False
 	dw_class_filter.Enabled = False
+	pb_class.Enabled = False
 END IF
 
 cbx_all_line.Checked = False
@@ -3976,8 +4023,10 @@ end type
 
 event retrieveend;IF rowcount = 0 Then
 	cbx_all_makes.Enabled = False
+	pb_make.Enabled = False
 ELSE
 	cbx_all_makes.Enabled = True
+	pb_make.Enabled = True
 END IF
 
 cbx_all_makes.Checked = False
@@ -4031,8 +4080,10 @@ end type
 
 event retrieveend;IF rowcount = 0 THEN
 	cbx_all_models.Enabled = False
+	pb_model.Enabled = False
 ELSE
 	cbx_all_models.Enabled = True
+	pb_model.Enabled = True
 END IF
 
 cbx_all_models.Checked = False
@@ -4056,10 +4107,6 @@ uf_multiselect_dw(this, row)
 
 // Load the selected values into an Array
 wf_LoadModel( )
-
-//dw_year_from.reset()
-//dw_year_to.reset()
-//wf_reset_year()
 
 dw_year_from.setitem( 1,1,'')
 dw_year_to.setitem( 1,1,'')
