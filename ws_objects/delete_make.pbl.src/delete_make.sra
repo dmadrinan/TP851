@@ -21,8 +21,8 @@ String gs_Hkey_CurrentUser = "HKEY_CURRENT_USER\SOFTWARE\DSG\TALKING PICTURES"
 
 string gs_filename
 
-//String gs_OLEDBDriver = "MSOLEDBSQL"
-String gs_OLEDBDriver = "SQLOLEDB"
+String gs_OLEDBDriver = "MSOLEDBSQL19"
+//String gs_OLEDBDriver = "SQLOLEDB"
 
 string gs_aces_profile, gs_spid
 
@@ -109,12 +109,14 @@ END IF
 RegistryGet(gs_Hkey_CurrentUser, "Path", gs_path)
 
 // Profile MSQL_TALKPIC
-SQLCA.DBMS = "OLE DB"
+SQLCA.DBMS = gs_OLEDBDriver
+SQLCA.ServerName = gs_serverName
 SQLCA.LogId = gs_dbUser
 SQLCA.LogPass = gs_dbPwd
 SQLCA.AutoCommit = FALSE
-SQLCA.Lock = "RC"
-SQLCA.dbparm= "PROVIDER='"+gs_OLEDBDriver+"',DATASOURCE='"+gs_servername+"',PROVIDERSTRING='Database="+gs_tp_profile+";App=TPBulkDelete',DelimitIdentifier='Yes',IdentifierQuoteChar='~"'"
+SQLCA.Lock = "RU"
+//SQLCA.dbparm= "PROVIDER='"+gs_OLEDBDriver+"',DATASOURCE='"+gs_servername+"',PROVIDERSTRING='Database="+gs_tp_profile+";App=TPBulkDelete',DelimitIdentifier='Yes',IdentifierQuoteChar='~"'"
+SQLCA.DBParm = "ProviderString='AppName=TPBulkDelete',DelimitIdentifier='Yes',Database='" + gs_tp_profile + "',IdentifierQuoteChar='~"'"
 
 // Attempt to connect to database.
 Connect using SQLCA;
