@@ -1,0 +1,24 @@
+﻿$PBExportHeader$uf_get_systemvalue.srf
+global type uf_get_systemvalue from function_object
+end type
+
+forward prototypes
+global function string uf_get_systemvalue (string as_key)
+end prototypes
+
+global function string uf_get_systemvalue (string as_key);//String uf_get_systemvalue( /*string as_type */)
+//Parameter :	as_key : the key in system_table
+//Return : value
+
+String ls_value
+
+
+Select system_value  into :ls_value from system_table where upper(system_key) =upper(:as_key);
+
+IF  isnull(ls_value) then
+	ls_value = ''
+END IF
+
+return ls_value
+end function
+

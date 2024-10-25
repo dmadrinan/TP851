@@ -1,0 +1,66 @@
+﻿$PBExportHeader$uf_convert_into_unc_path.srf
+global type uf_convert_into_unc_path from function_object
+end type
+
+forward prototypes
+global function string uf_convert_into_unc_path (string as_fullfilename)
+end prototypes
+
+global function string uf_convert_into_unc_path (string as_fullfilename);// uf_convert_into_unc_path( argument Full File Name With Local Path)
+Int  li_FirstPos, li_SecondPos
+String ls_ComputerName
+String ls_shared
+
+string    ls_tmp, ls_unc
+Ulong     ll_rc, ll_size
+
+//Add to convert file path to UNC path.
+If Pos(as_FullFileName,"\\") = 0 and Pos(as_FullFileName,"http:") = 0 and Pos(as_FullFileName,"https:") = 0 and Pos(as_FullFileName,"\") > 0 then
+	// Checked Mapped Drive and convert to UNC path
+	ls_tmp = upper(left(as_FullFileName,2))
+	If right(ls_tmp,1) = ":" Then
+		ll_size = 255
+		ls_unc = Space(ll_size)
+		
+		//ls_tmp: Mapped Drive, ls_unc: UNC path, ll_size: length of UNC path
+		ll_rc = WNetGetConnectionA (ls_tmp, ls_unc, ll_size)
+		If ll_rc = 0 Then
+			as_FullFileName = ls_unc + mid(as_FullFileName,3)
+			Return as_FullFileName
+		End If
+	End If
+	
+	// Local Path
+	RegistryGet("HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\ComputerName\ComputerName",&
+					"ComputerName",ls_ComputerName)
+			
+	//not in base sharing folder
+	li_FirstPos = Pos(as_FullFileName,'\')
+	Do While li_FirstPos > 0 
+		li_SecondPos = Pos(as_FullFileName,'\', li_FirstPos + 1)
+
+		// Get the first shared folder in the path, then users do not need share the last folder, they can only share the upperfolder
+		If li_SecondPos = 0 Then
+			ls_shared = Left(as_FullFileName,1)	
+		Else
+			ls_shared = Mid(as_FullFileName,li_FirstPos + 1, li_SecondPos - li_FirstPos) 
+		End If
+		If DirectoryExists("\\" + ls_ComputerName + '\' + ls_shared) Then Exit
+		
+		If li_SecondPos = 0 Then Exit
+		If Pos(as_FullFileName, '\', li_SecondPos + 1) = 0 Then Exit
+		li_FirstPos = li_SecondPos
+	Loop
+
+	If li_SecondPos = 0 Then
+		as_FullFileName = Left(as_FullFileName,1) + Mid(as_FullFileName,li_FirstPos)	
+	Else
+		as_FullFileName = Mid(as_FullFileName,li_FirstPos + 1) 
+	End If
+	as_FullFileName = "\\" + ls_ComputerName + '\' + as_FullFileName
+End If
+Return as_FullFileName
+
+
+end function
+

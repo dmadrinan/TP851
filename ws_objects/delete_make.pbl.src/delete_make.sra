@@ -57,6 +57,9 @@ string webview2url = "https://developer.microsoft.com/en-us/microsoft-edge/webvi
 end type
 global delete_make delete_make
 
+type prototypes
+FUNCTION ulong WNetGetConnectionA  ( ref string drv, ref string unc, ref ulong buf ) LIBRARY "mpr.dll" alias for "WNetGetConnectionA;Ansi"
+end prototypes
 type variables
 
 

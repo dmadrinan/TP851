@@ -2,6 +2,10 @@
 forward
 global type w_delete_make from window
 end type
+type cb_2 from commandbutton within w_delete_make
+end type
+type cb_1 from commandbutton within w_delete_make
+end type
 type rb_uncheck_all from radiobutton within w_delete_make
 end type
 type rb_check_all from radiobutton within w_delete_make
@@ -153,6 +157,8 @@ long backcolor = 79741120
 string icon = "DeleteData.ico"
 boolean center = true
 event ue_postopen ( )
+cb_2 cb_2
+cb_1 cb_1
 rb_uncheck_all rb_uncheck_all
 rb_check_all rb_check_all
 gb_8 gb_8
@@ -269,6 +275,8 @@ public function boolean wf_load_criteria_into_master (string as_profileid)
 public function boolean wf_load_criteria_into_detail (string as_profileid)
 public subroutine wf_reset_profile ()
 public subroutine wf_enable_dw (boolean ab_enabled)
+public function integer wf_import ()
+public function integer wf_export ()
 end prototypes
 
 event ue_postopen();
@@ -1716,8 +1724,14 @@ Else
 End If
 end subroutine
 
-event open;
+public function integer wf_import ();return 1
+end function
 
+public function integer wf_export ();
+return 1
+end function
+
+event open;string ls_usertype
 // Set up transaction objects for all input fields on window.
 dw_profile.settransobject ( SQLCA )
 dw_profile_master.settransobject ( SQLCA )
@@ -1728,10 +1742,21 @@ dw_Line.SetTransObject   ( SQLCA )
 dw_Make.SetTransObject ( SQLCA )
 dw_Model.SetTransObject( SQLCA )
 
+select user_type
+into:ls_usertype
+from users
+where user_id=:gs_userid;
+
+if ls_usertype = 'MASTER USER' then 
+	cb_1.enabled = true
+end if
+
 PostEvent ( 'ue_postopen' )
 end event
 
 on w_delete_make.create
+this.cb_2=create cb_2
+this.cb_1=create cb_1
 this.rb_uncheck_all=create rb_uncheck_all
 this.rb_check_all=create rb_check_all
 this.gb_8=create gb_8
@@ -1800,7 +1825,9 @@ this.gb_vendor=create gb_vendor
 this.gb_brand=create gb_brand
 this.gb_6=create gb_6
 this.gb_7=create gb_7
-this.Control[]={this.rb_uncheck_all,&
+this.Control[]={this.cb_2,&
+this.cb_1,&
+this.rb_uncheck_all,&
 this.rb_check_all,&
 this.gb_8,&
 this.cb_reset,&
@@ -1871,6 +1898,8 @@ this.gb_7}
 end on
 
 on w_delete_make.destroy
+destroy(this.cb_2)
+destroy(this.cb_1)
 destroy(this.rb_uncheck_all)
 destroy(this.rb_check_all)
 destroy(this.gb_8)
@@ -1940,6 +1969,43 @@ destroy(this.gb_brand)
 destroy(this.gb_6)
 destroy(this.gb_7)
 end on
+
+type cb_2 from commandbutton within w_delete_make
+integer x = 3534
+integer y = 168
+integer width = 402
+integer height = 92
+integer taborder = 50
+integer textsize = -8
+integer weight = 700
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "MS Sans Serif"
+string text = "Export"
+end type
+
+event clicked;openwithparm(w_import,'EXPORT')
+end event
+
+type cb_1 from commandbutton within w_delete_make
+integer x = 3095
+integer y = 168
+integer width = 402
+integer height = 92
+integer taborder = 50
+integer textsize = -8
+integer weight = 700
+fontcharset fontcharset = ansi!
+fontpitch fontpitch = variable!
+fontfamily fontfamily = swiss!
+string facename = "MS Sans Serif"
+boolean enabled = false
+string text = "Import"
+end type
+
+event clicked;openwithparm(w_import,'IMPORT')
+end event
 
 type rb_uncheck_all from radiobutton within w_delete_make
 integer x = 1403

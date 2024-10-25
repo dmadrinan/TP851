@@ -1,0 +1,25 @@
+﻿$PBExportHeader$uf_get_spid.srf
+global type uf_get_spid from function_object
+end type
+
+forward prototypes
+global function integer uf_get_spid ()
+end prototypes
+
+global function integer uf_get_spid ();// 19Aug2008 
+// We will use @@spid for multiuser concurrency for unique temp table creation.
+int li_spid
+
+// This function gets current @@spid from the SQL Server Engine.
+
+SELECT TOP 1 @@spid 
+INTO :li_spid
+FROM system_table;
+
+Return li_spid
+
+
+
+
+end function
+
